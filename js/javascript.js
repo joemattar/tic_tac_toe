@@ -37,4 +37,15 @@
     // It is possible to create an unbeatable AI using the minimax algorithm
     // (read about it here, some googling will help you out with this one)
     
-    // If you get this running definitely come show it off in the chatroom. It’s quite an accomplishment! 
+    // If you get this running definitely come show it off in the chatroom. It’s quite an accomplishment!
+
+
+// HTML
+// HEADER - Title
+// Player Names
+// PvP or PvAI
+// STARt/RESTART Button
+// TIC TAC TOE Board
+// Winning Player Message
+// Winning AI Message
+// FOOTER
