@@ -9,10 +9,10 @@
 }
 
 :root {
-    --color-header-footer: aqua;
+    --color-header-footer: #1992d3;
     --color-grid: black;
-    --color-grid-space: red;
-    --color-main: yellow;
+    --color-grid-space: #cf083f;
+    --color-main: #ecbc6c;
     --font-general: "Comfortaa";
     --font-x-and-o: "Bozart";
 }
@@ -46,12 +46,15 @@ p {
 
 .main {
     background-color: var(--color-main);
+
+    display: grid;
+    place-content: center;
 }
 
 .main .grid {
     background-color: var(--color-grid);
 
-    max-width: 900px;
+    width: 480px;
 
     display: grid;
     grid-template-columns: repeat(3, 1fr);
