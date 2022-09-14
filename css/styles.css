@@ -9,10 +9,14 @@
 }
 
 :root {
-    --color-header-footer: #1992d3;
+    --color-header-footer: #5588ff;
     --color-grid: black;
-    --color-grid-space: #cf083f;
-    --color-main: #ecbc6c;
+    --color-grid-space: #dd4444;
+    --color-main: #ffcc66;
+    --color-button-checked: #7799dd;
+    --color-button-checked-hover: #5588ee;
+    --color-button-unchecked: #cc99cc;
+    --color-button-unchecked-hover: #aa66aa;
     --font-general: "Comfortaa";
     --font-x-and-o: "Bozart";
 }
@@ -26,7 +30,7 @@ body {
     height: 100vh;
 
     display: grid;
-    grid-template-rows: 100px 1fr 100px;
+    grid-template-rows: 60px 1fr 5fr 60px;
 }
 
 p {
@@ -44,6 +48,54 @@ p {
     place-content: center;
 }
 
+.players {
+    background-color: var(--color-main);
+
+    display: grid;
+    place-content: center;
+    place-items: center;
+    row-gap: 5px;
+
+}
+
+.players .player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.radio-buttons {
+    opacity: 0;
+    position: fixed;
+    width: 0;
+}
+
+.radio-labels {
+    font-size: 0.7rem;
+    width: 100px;
+    height: 30px;
+    border-style: solid;
+    border-width: 0;
+    border-radius: 5px;
+    border-color: #ce0001;
+    background-color: var(--color-button-unchecked);
+    -webkit-text-stroke: 0.5px;
+    display: grid;
+    place-content: center;
+}
+
+.radio-labels:hover {
+    background-color: var(--color-button-unchecked-hover);
+}
+
+.radio-buttons:checked + .radio-labels {
+    background-color: var(--color-button-checked);
+}
+
+.radio-buttons:checked + .radio-labels:hover {
+    background-color: var(--color-button-checked-hover);
+}
+
 .main {
     background-color: var(--color-main);
 
@@ -52,7 +104,7 @@ p {
 }
 
 .main .grid {
-    background-color: var(--color-grid);
+    background-color: var(--color-main);
 
     width: 480px;
 
@@ -64,7 +116,7 @@ p {
 
 .main .grid .grid-space {
     font-family: var(--font-x-and-o);
-    font-size: 8rem;
+    font-size: 6rem;
 
     background-color: var(--color-grid-space);
 
@@ -75,6 +127,8 @@ p {
 }
 
 .footer {
+    font-weight: bold;
+    
     background-color: var(--color-header-footer);
 
     display: flex;

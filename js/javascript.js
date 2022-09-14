@@ -1,5 +1,41 @@
-// You’re going to store the gameboard as an array inside of a Gameboard object,
-// so start there! Your players are also going to be stored in objects…
+const gridSpaces = document.querySelectorAll(".grid-space");
+
+// Store the gameboard as an array inside of a Gameboard object
+const gameBoard = (function() {
+    let gameboard = []
+    for (let i = 0; i < 9; i++) {
+        gameboard.push("");
+    }
+
+    function _mark() {
+
+    }
+
+    function markX() {
+
+    }
+
+    function markO() {
+
+    }
+
+    return {
+        gameboard,
+    };
+
+})();
+
+const displayController = (function() {
+
+})();
+
+// Store players in objects
+const Player = function() {
+
+}
+
+
+
 // and you’re probably going to want an object to control the flow of the game itself.
 
     // Your main goal here is to have as little global code as possible.
@@ -41,11 +77,15 @@
 
 
 // HTML
-// HEADER -
 // Player Names
 // PvP or PvAI
 // STARt/RESTART Button
-// TIC TAC TOE Board
 // Winning Player Message
 // Winning AI Message
-// FOOTER
+
+for (let gridSpace of gridSpaces) {
+    gridSpace.addEventListener("click", function (e) {
+        let gridSpaceId = Number(e.target.dataset.gridSpace);
+        console.log(gridSpaceId)
+    })
+}
