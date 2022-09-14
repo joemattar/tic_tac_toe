@@ -41,7 +41,7 @@
 
 
 // HTML
-// HEADER - Title
+// HEADER -
 // Player Names
 // PvP or PvAI
 // STARt/RESTART Button

@@ -46,16 +46,12 @@ p {
 
 .main {
     background-color: var(--color-main);
-
-    width: 100%;
-    height: 100%;
-
 }
 
 .main .grid {
     background-color: var(--color-grid);
 
-
+    max-width: 900px;
 
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -63,7 +59,7 @@ p {
 
 }
 
-.grid-space {
+.main .grid .grid-space {
     font-family: var(--font-x-and-o);
     font-size: 8rem;
 
