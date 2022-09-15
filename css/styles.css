@@ -34,7 +34,34 @@ body {
     height: 100vh;
 
     display: grid;
-    grid-template-rows: 60px 2fr 8fr 1fr 1fr 60px;
+    grid-template-rows: 60px 2fr 1fr 8fr 1fr 1fr 60px;
+}
+
+body>div {
+    margin: 15px 10px;
+
+    display: grid;
+    place-content: center;
+}
+
+button {
+    font-size: 0.7rem;
+    width: 100px;
+    height: 30px;
+    border-width: 0;
+    border-radius: 5px;
+    background-color: var(--color-button-unchecked);
+    -webkit-text-stroke: 0.5px;
+    display: grid;
+    place-content: center;
+}
+
+button:hover {
+background-color: var(--color-button-unchecked-hover);
+}
+
+button:active {
+background-color: var(--color-button-unchecked-click);
 }
 
 p {
@@ -53,13 +80,8 @@ p {
 }
 
 .players {
-    padding: 25px 10px;
-
-    display: grid;
-    place-content: center;
     place-items: center;
     row-gap: 5px;
-
 }
 
 .players .player {
@@ -102,20 +124,12 @@ p {
     background-color: var(--color-button-checked-hover);
 }
 
-.main {
-    padding: 25px 10px;
-
-    display: grid;
-    place-content: center;
-}
-
 .main .grid {
     width: 480px;
 
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
-
 }
 
 .main .grid .grid-space {
@@ -130,40 +144,6 @@ p {
     place-content: center;
 }
 
-.game-over-message {
-    padding: 25px 10px;
-    
-    display: grid;
-    place-content: center;
-}
-
-.restart {
-    padding: 25px 10px;
-
-    display: grid;
-    place-content: center;
-}
-
-.restart button {
-        font-size: 0.7rem;
-        width: 100px;
-        height: 30px;
-        border-width: 0;
-        border-radius: 5px;
-        background-color: var(--color-button-unchecked);
-        -webkit-text-stroke: 0.5px;
-        display: grid;
-        place-content: center;
-}
-
-.restart button:hover {
-    background-color: var(--color-button-unchecked-hover);
-}
-
-.restart button:active {
-    background-color: var(--color-button-unchecked-click);
-}
-
 .footer {
     font-weight: bold;
     
@@ -172,10 +152,6 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.footer a {
-
 }
 
 .footer img {
