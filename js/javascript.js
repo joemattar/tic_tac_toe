@@ -100,6 +100,7 @@ const displayController = (function() {
     // Restart game
     // Unlock player selection
     // Unlock play button
+    // ADD FUNCTIONALITY TO REVERT PLAYER SELECTION TO HUMAN v HUMAN or HUMAN v EASY AI
     restartButton.addEventListener("click", function () {
         enablePlayerSelection();
         playButton.disabled = false;
