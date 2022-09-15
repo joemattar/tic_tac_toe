@@ -61,7 +61,6 @@ const Player = function() {
 // Build the logic that checks for when the game is over! Should check for 3-in-a-row and a tie.
 
 
-// Clean up the interface to allow players to put in their names,
 // include a button to start/restart the game and add a display element that congratulates the winning player!
 
 
@@ -75,13 +74,6 @@ const Player = function() {
     
     // If you get this running definitely come show it off in the chatroom. It’s quite an accomplishment!
 
-
-// HTML
-// Player Names
-// PvP or PvAI
-// STARt/RESTART Button
-// Winning Player Message
-// Winning AI Message
 
 for (let gridSpace of gridSpaces) {
     gridSpace.addEventListener("click", function (e) {

@@ -17,6 +17,7 @@
     --color-button-checked-hover: #5588ee;
     --color-button-unchecked: #cc99cc;
     --color-button-unchecked-hover: #aa66aa;
+    --color-button-unchecked-click: #552255;
     --font-general: "Comfortaa";
     --font-x-and-o: "Bozart";
 }
@@ -27,10 +28,12 @@ body {
 
     font-family: var(--font-general);
 
+    background-color: var(--color-main);
+
     height: 100vh;
 
     display: grid;
-    grid-template-rows: 60px 1fr 5fr 60px;
+    grid-template-rows: 60px 2fr 8fr 1fr 1fr 60px;
 }
 
 p {
@@ -49,7 +52,7 @@ p {
 }
 
 .players {
-    background-color: var(--color-main);
+    padding: 25px 10px;
 
     display: grid;
     place-content: center;
@@ -74,10 +77,8 @@ p {
     font-size: 0.7rem;
     width: 100px;
     height: 30px;
-    border-style: solid;
     border-width: 0;
     border-radius: 5px;
-    border-color: #ce0001;
     background-color: var(--color-button-unchecked);
     -webkit-text-stroke: 0.5px;
     display: grid;
@@ -97,15 +98,13 @@ p {
 }
 
 .main {
-    background-color: var(--color-main);
+    padding: 25px 10px;
 
     display: grid;
     place-content: center;
 }
 
 .main .grid {
-    background-color: var(--color-main);
-
     width: 480px;
 
     display: grid;
@@ -124,6 +123,40 @@ p {
 
     display: grid;
     place-content: center;
+}
+
+.game-over-message {
+    padding: 25px 10px;
+    
+    display: grid;
+    place-content: center;
+}
+
+.restart {
+    padding: 25px 10px;
+
+    display: grid;
+    place-content: center;
+}
+
+.restart button {
+        font-size: 0.7rem;
+        width: 100px;
+        height: 30px;
+        border-width: 0;
+        border-radius: 5px;
+        background-color: var(--color-button-unchecked);
+        -webkit-text-stroke: 0.5px;
+        display: grid;
+        place-content: center;
+}
+
+.restart button:hover {
+    background-color: var(--color-button-unchecked-hover);
+}
+
+.restart button:active {
+    background-color: var(--color-button-unchecked-click);
 }
 
 .footer {
