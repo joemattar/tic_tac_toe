@@ -1,17 +1,52 @@
 // Module to
 // Store the gameboard as an array inside of a Gameboard object
-const gameBoard = (function() {
-    let gameboard = []
-    for (let i = 0; i < 9; i++) {
-        gameboard.push("");
+// Aand you’re probably going to want an object to control the flow of the game itself.
+const gameController = (function() {
+    let _gameGrid = []
+
+    // Empties the gameGrid array and fills it with nine empty strings ""
+    function resetGameGrid() {
+        _gameGrid = [];
+        for (let i = 0; i < 9; i++) {
+            _gameGrid.push("");
+        }
     }
 
-    function _mark() {
+    // Function to update gameGRid array with "X" or "O"
+    function updateGameGrid(gridSpaceId, symbol) {
+        _gameGrid[gridSpaceId] = symbol;
+    }
+
+    // Function to check if game over:
+    // 3 straight or diagonal consecutive symbols = Win
+    // Board filled & no consecutive symbols = Draw 
+    // Return WINNING SYMBOL OR DRAW ????
+    function checkGameOver() {
+        let checkObject = {};
+        for (let i = 0; i < _gameGrid.length; i++) {
+            // Fill object with scenario 0 to 2 
+            for (let j = 0; j <= 2; j++) {
+
+            }
+            // Fill object with scenario 3 to 5
+            for (let k = 3; k <= 5; k++) {
+
+            }
+            // Fill object with scenario 6
+
+            // Fill object with scenario 7
+
+        }
+
+        // Scenario 9 is a draw
 
     }
+
+    resetGameGrid();
 
     return {
-        gameboard,
+        resetGameGrid,
+        updateGameGrid,
     };
 
 })();
@@ -21,7 +56,7 @@ const displayController = (function() {
     const radioInputs = document.querySelectorAll(".radio-buttons");
     const radioLabels = document.querySelectorAll(".radio-labels");
     const playButton = document.getElementById("play-button")
-    const gridSpaces = document.querySelectorAll(".grid-space");
+    const gridSpaceDivs = document.querySelectorAll(".grid-space");
     const restartButton = document.getElementById("restart-button");
 
     // Function to disable unselected player types radio buttons
@@ -53,10 +88,10 @@ const displayController = (function() {
 
 
     // TO REVIEW
-    for (let gridSpace of gridSpaces) {
-        gridSpace.addEventListener("click", function (e) {
-            let gridSpaceId = Number(e.target.dataset.gridSpace);
-            console.log(gridSpaceId)
+    for (let gridSpaceDiv of gridSpaceDivs) {
+        gridSpaceDiv.addEventListener("click", function (e) {
+            let gridSpaceDivId = Number(e.target.dataset.gridSpace);
+            console.log(gridSpaceDivId)
         })
     }
 
@@ -76,16 +111,19 @@ const displayController = (function() {
 })();
 
 // Factory function to create player objects
-const Player = function(symbol, role) {
+const Player = function(position, symbol, role, playsNext) {
 
     return {
-
+        position, // 1 , 2
+        symbol, // "X" , "O"
+        role, // "human", "ai-easy", "ai-normal", "ai-impossible"
+        playsNext, // true , false
     }
 }
 
 
 
-// and you’re probably going to want an object to control the flow of the game itself.
+
 
 // Write a JavaScript function that will render the contents of the gameboard array to the webpage
 
@@ -115,6 +153,5 @@ const Player = function(symbol, role) {
     // (read about it here, some googling will help you out with this one)
     
     // If you get this running definitely come show it off in the chatroom. It’s quite an accomplishment!
-
 
 
