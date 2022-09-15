@@ -64,6 +64,10 @@ button:active {
 background-color: var(--color-button-unchecked-click);
 }
 
+button:disabled {
+    background-color: var(--color-button-unchecked-disabled);
+}
+
 p {
     margin: 0;
     padding: 0;
@@ -137,6 +141,8 @@ p {
     font-size: 6rem;
 
     background-color: var(--color-grid-space);
+
+    border-radius: 25px;
 
     aspect-ratio: 1/1;
 

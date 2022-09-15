@@ -1,3 +1,4 @@
+// Module to
 // Store the gameboard as an array inside of a Gameboard object
 const gameBoard = (function() {
     let gameboard = []
@@ -15,18 +16,13 @@ const gameBoard = (function() {
 
 })();
 
+// Module that controls html elements
 const displayController = (function() {
-    const gridSpaces = document.querySelectorAll(".grid-space");
     const radioInputs = document.querySelectorAll(".radio-buttons");
     const radioLabels = document.querySelectorAll(".radio-labels");
-
-    // TO REVIEW
-    for (let gridSpace of gridSpaces) {
-        gridSpace.addEventListener("click", function (e) {
-            let gridSpaceId = Number(e.target.dataset.gridSpace);
-            console.log(gridSpaceId)
-        })
-    }
+    const playButton = document.querySelector(".play>button");
+    const gridSpaces = document.querySelectorAll(".grid-space");
+    const restartButton = document.querySelector(".restart>button");
 
     // Function to disable unselected player types radio buttons
     function disablePlayerSelection() {
@@ -37,35 +33,60 @@ const displayController = (function() {
         }
     }
 
-    //Function to enable all player types radio buttons
+    // Function to enable all player types radio buttons
     function enablePlayerSelection() {
         for (let radioInput of radioInputs) {
             radioInput.disabled = false;
         }
     }
 
-    return {
-        disablePlayerSelection: disablePlayerSelection,
-        enablePlayerSelection: enablePlayerSelection,
+    // Play button click event listener to:
+    // Lock player selection
+    // Return players.
+    // Lock play button
+    // RETURN PLAYERS FUNCTIONALITY ???
+    playButton.addEventListener("click", function () {
+        disablePlayerSelection();
+        playButton.disabled = true;
+    })
+
+
+
+    // TO REVIEW
+    for (let gridSpace of gridSpaces) {
+        gridSpace.addEventListener("click", function (e) {
+            let gridSpaceId = Number(e.target.dataset.gridSpace);
+            console.log(gridSpaceId)
+        })
     }
 
+
+    // Restart button event listener to:
+    // Restart game
+    // Unlock player selection
+    // Unlock play button
+    restartButton.addEventListener("click", function () {
+        enablePlayerSelection();
+        playButton.disabled = false;
+    })
+
+    return {
+
+    }
 })();
 
+// Factory function to create player objects
 // Store players in objects
-const Player = function(symbol) {   
+const Player = function(symbol, role) {
+    
+    return {
 
-
+    }
 }
 
 
 
 // and you’re probably going to want an object to control the flow of the game itself.
-
-    // Your main goal here is to have as little global code as possible.
-    // Try tucking everything away inside of a module or factory.
-    // Rule of thumb: if you only ever need ONE of something (gameBoard, displayController), use a module.
-    // If you need multiples of something (players!), create them with factories.
-
 
 // Set up your HTML and write a JavaScript function that will render the contents of the gameboard array
 // to the webpage (for now you can just manually fill in the array with "X"s and "O"s)
@@ -98,20 +119,4 @@ const Player = function(symbol) {
     // If you get this running definitely come show it off in the chatroom. It’s quite an accomplishment!
 
 
-
-// BELOW CURRENTLY FOR TESTING
-const restartButton = document.querySelector(".restart>button");
-
-let other = 0;
-
-restartButton.addEventListener("click", function () {
-    if (other % 2 === 0) {
-        displayController.disablePlayerSelection();
-        console.log("disable");
-    } else {
-        displayController.enablePlayerSelection();
-        console.log("enable");
-    }
-    other += 1;
-})
 
