@@ -1,5 +1,3 @@
-const gridSpaces = document.querySelectorAll(".grid-space");
-
 // Store the gameboard as an array inside of a Gameboard object
 const gameBoard = (function() {
     let gameboard = []
@@ -11,14 +9,6 @@ const gameBoard = (function() {
 
     }
 
-    function markX() {
-
-    }
-
-    function markO() {
-
-    }
-
     return {
         gameboard,
     };
@@ -26,11 +16,44 @@ const gameBoard = (function() {
 })();
 
 const displayController = (function() {
+    const gridSpaces = document.querySelectorAll(".grid-space");
+    const radioInputs = document.querySelectorAll(".radio-buttons");
+    const radioLabels = document.querySelectorAll(".radio-labels");
+
+    // TO REVIEW
+    for (let gridSpace of gridSpaces) {
+        gridSpace.addEventListener("click", function (e) {
+            let gridSpaceId = Number(e.target.dataset.gridSpace);
+            console.log(gridSpaceId)
+        })
+    }
+
+    // Function to disable unselected player types radio buttons
+    function disablePlayerSelection() {
+        for (let radioInput of radioInputs) {
+            if (radioInput.checked === false) {
+                radioInput.disabled = true;
+            }
+        }
+    }
+
+    //Function to enable all player types radio buttons
+    function enablePlayerSelection() {
+        for (let radioInput of radioInputs) {
+            radioInput.disabled = false;
+        }
+    }
+
+    return {
+        disablePlayerSelection: disablePlayerSelection,
+        enablePlayerSelection: enablePlayerSelection,
+    }
 
 })();
 
 // Store players in objects
-const Player = function() {
+const Player = function(symbol) {   
+
 
 }
 
@@ -75,9 +98,20 @@ const Player = function() {
     // If you get this running definitely come show it off in the chatroom. It’s quite an accomplishment!
 
 
-for (let gridSpace of gridSpaces) {
-    gridSpace.addEventListener("click", function (e) {
-        let gridSpaceId = Number(e.target.dataset.gridSpace);
-        console.log(gridSpaceId)
-    })
-}
+
+// BELOW CURRENTLY FOR TESTING
+const restartButton = document.querySelector(".restart>button");
+
+let other = 0;
+
+restartButton.addEventListener("click", function () {
+    if (other % 2 === 0) {
+        displayController.disablePlayerSelection();
+        console.log("disable");
+    } else {
+        displayController.enablePlayerSelection();
+        console.log("enable");
+    }
+    other += 1;
+})
+

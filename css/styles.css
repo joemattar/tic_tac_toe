@@ -16,6 +16,7 @@
     --color-button-checked: #7799dd;
     --color-button-checked-hover: #5588ee;
     --color-button-unchecked: #cc99cc;
+    --color-button-unchecked-disabled: #666688;
     --color-button-unchecked-hover: #aa66aa;
     --color-button-unchecked-click: #552255;
     --font-general: "Comfortaa";
@@ -87,6 +88,10 @@ p {
 
 .radio-labels:hover {
     background-color: var(--color-button-unchecked-hover);
+}
+
+.radio-buttons:disabled + .radio-labels {
+    background-color: var(--color-button-unchecked-disabled);
 }
 
 .radio-buttons:checked + .radio-labels {
