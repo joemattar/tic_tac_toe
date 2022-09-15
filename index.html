@@ -13,7 +13,7 @@
             <p>Tic Tac Toe</p>
         </header>
         <div class="players">
-            <div>PLAYER 1 ( X )</div>
+            <div>Player 1 ( X )</div>
             <div class="player">
                 <input type="radio" class="radio-buttons" name="player-1" id="human-1" value="human" checked>
                 <label for="human-1" class="radio-labels">HUMAN</label>
@@ -25,7 +25,7 @@
                 <label for="ai-impossible-1" class="radio-labels">IMPOSSIBLE AI</label>                
             </div>
             <div>vs.</div>
-            <div>PLAYER 2 ( O )</div>
+            <div>Player 2 ( O )</div>
             <div class="player">
                 <input type="radio" class="radio-buttons" name="player-2" id="human-2" value="human" checked>
                 <label for="human-2" class="radio-labels">HUMAN</label>
@@ -36,9 +36,6 @@
                 <input type="radio" class="radio-buttons" name="player-2" id="ai-impossible-2" value="ai-impossible">
                 <label for="ai-impossible-2" class="radio-labels">IMPOSSIBLE AI</label>
             </div>
-        </div>
-        <div class="play">
-            <button>PLAY</button>
         </div>
         <div class="main">
             <div class="grid">
@@ -56,8 +53,9 @@
         <div class="game-over-message">
             This text is to display the winning player!
         </div>
-        <div class="restart">
-            <button>RESTART</button>
+        <div class="play restart">
+            <button id="play-button">PLAY</button>
+            <button id="restart-button">RESTART</button>
         </div>
         <footer class="footer">
             THE ODIN PROJECT - JOEMATTAR <pre> </pre><a href="https://github.com/joemattar" target="_blank"><img src="./images/github_logo.png" alt="Git Hub Logo"></a>

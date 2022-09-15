@@ -20,9 +20,9 @@ const gameBoard = (function() {
 const displayController = (function() {
     const radioInputs = document.querySelectorAll(".radio-buttons");
     const radioLabels = document.querySelectorAll(".radio-labels");
-    const playButton = document.querySelector(".play>button");
+    const playButton = document.getElementById("play-button")
     const gridSpaces = document.querySelectorAll(".grid-space");
-    const restartButton = document.querySelector(".restart>button");
+    const restartButton = document.getElementById("restart-button");
 
     // Function to disable unselected player types radio buttons
     function disablePlayerSelection() {
@@ -60,7 +60,7 @@ const displayController = (function() {
         })
     }
 
-
+    
     // Restart button event listener to:
     // Restart game
     // Unlock player selection
@@ -76,9 +76,8 @@ const displayController = (function() {
 })();
 
 // Factory function to create player objects
-// Store players in objects
 const Player = function(symbol, role) {
-    
+
     return {
 
     }
@@ -88,8 +87,7 @@ const Player = function(symbol, role) {
 
 // and you’re probably going to want an object to control the flow of the game itself.
 
-// Set up your HTML and write a JavaScript function that will render the contents of the gameboard array
-// to the webpage (for now you can just manually fill in the array with "X"s and "O"s)
+// Write a JavaScript function that will render the contents of the gameboard array to the webpage
 
 
 // Build the functions that allow players to add marks to a specific spot on the board,
@@ -105,7 +103,7 @@ const Player = function(symbol, role) {
 // Build the logic that checks for when the game is over! Should check for 3-in-a-row and a tie.
 
 
-// include a button to start/restart the game and add a display element that congratulates the winning player!
+// Add a display element that congratulates the winning player!
 
 
 // Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!

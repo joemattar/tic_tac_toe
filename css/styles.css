@@ -34,7 +34,7 @@ body {
     height: 100vh;
 
     display: grid;
-    grid-template-rows: 60px 2fr 1fr 8fr 1fr 1fr 60px;
+    grid-template-rows: 60px 2fr 8fr 1fr 1fr 60px;
 }
 
 body>div {
@@ -148,6 +148,12 @@ p {
 
     display: grid;
     place-content: center;
+}
+
+.play {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
 }
 
 .footer {
