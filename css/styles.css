@@ -150,6 +150,11 @@ p {
     place-content: center;
 }
 
+.game-over-message {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
 .play {
     display: flex;
     justify-content: center;

@@ -12,10 +12,20 @@ const gameController = (function() {
         }
     }
 
+    // Function to return _gameGrid array for external use
+    function getGameGrid() {
+        return _gameGrid
+    }
+
     // Function to update gameGRid array with "X" or "O"
     function updateGameGrid(gridSpaceId, symbol) {
         _gameGrid[gridSpaceId] = symbol;
     }
+
+
+
+
+
 
     // Function to check if game over:
     // 3 straight or diagonal consecutive symbols = Win
@@ -46,7 +56,9 @@ const gameController = (function() {
 
     return {
         resetGameGrid,
+        getGameGrid,
         updateGameGrid,
+        checkGameOver,
     };
 
 })();
@@ -55,9 +67,12 @@ const gameController = (function() {
 const displayController = (function() {
     const radioInputs = document.querySelectorAll(".radio-buttons");
     const radioLabels = document.querySelectorAll(".radio-labels");
-    const playButton = document.getElementById("play-button")
     const gridSpaceDivs = document.querySelectorAll(".grid-space");
+    const messageDiv = document.querySelector(".game-over-message");
+    const playButton = document.getElementById("play-button")
     const restartButton = document.getElementById("restart-button");
+
+    let currentPlayer
 
     // Function to disable unselected player types radio buttons
     function disablePlayerSelection() {
@@ -75,23 +90,71 @@ const displayController = (function() {
         }
     }
 
+    // Function to get selected player roles
+    function getSelectedPlayerRoles() {
+        const selectedPlayerRoles = [];
+        for (let radioInput of radioInputs) {
+            if(radioInput.checked === true) {
+                selectedPlayerRoles.push(radioInput);
+            }
+        }
+        return selectedPlayerRoles
+    }
+
+    // Function to switch current player
+    function switchThenGetCurrentPlayer(firstPlayer, secondPlayer) {
+        if (firstPlayer.playsNext === true) {
+            firstPlayer.playsNext = false;
+            secondPlayer.playsNext = true;
+            return secondPlayer
+        } else {
+            firstPlayer.playsNext = true;
+            secondPlayer.playsNext = false;
+            return firstPlayer
+        }
+    }
+
     // Play button click event listener to:
     // Lock player selection
-    // Return players.
     // Lock play button
-    // RETURN PLAYERS FUNCTIONALITY ???
+    // Create player 1 and 2 based on player role selection
     playButton.addEventListener("click", function () {
         disablePlayerSelection();
         playButton.disabled = true;
+
+        let selectedPlayerRoles = getSelectedPlayerRoles();
+        
+        // call create players function
+        const player1 = Player(1, "X", selectedPlayerRoles[0].value, true);
+        const player2 = Player(2, "O", selectedPlayerRoles[1].value, false);
+
+        currentPlayer = player1;
     })
 
+    // Function to display the _gameGrid array contents to the corresponding gridSpaceDivs
+    function displayGameGrid (gameGridArray) {
+        for (let i = 0; i < gameGridArray.length; i++) {
+            gridSpaceDivs[i].textContent = gameGridArray[i];
+        }
+    }
 
 
-    // TO REVIEW
+    // Build the functions that allow players to add marks to a specific spot on the board,
+    // and then tie it to the DOM, letting players click on the gameboard to place their marker.
+    // Don’t forget the logic that keeps players from playing in spots that are already taken!
+
+    // Add event listeners at each gridSpaceDiv to enable player marking functionality
     for (let gridSpaceDiv of gridSpaceDivs) {
         gridSpaceDiv.addEventListener("click", function (e) {
             let gridSpaceDivId = Number(e.target.dataset.gridSpace);
-            console.log(gridSpaceDivId)
+
+            // call the function to mark a symbol under certain condition
+
+            // call the function to update the array in gameController
+
+            // call the function to change current player under certain condition
+
+
         })
     }
 
@@ -100,10 +163,17 @@ const displayController = (function() {
     // Restart game
     // Unlock player selection
     // Unlock play button
+    // Reset gaemGrid then display
     // ADD FUNCTIONALITY TO REVERT PLAYER SELECTION TO HUMAN v HUMAN or HUMAN v EASY AI
     restartButton.addEventListener("click", function () {
         enablePlayerSelection();
         playButton.disabled = false;
+
+        gameController.resetGameGrid();
+        displayGameGrid(gameController.getGameGrid());
+        
+        messageDiv.textContent = "Please select players' roles then press PLAY!"
+
     })
 
     return {
@@ -124,25 +194,6 @@ const Player = function(position, symbol, role, playsNext) {
 
 
 
-
-
-// Write a JavaScript function that will render the contents of the gameboard array to the webpage
-
-
-// Build the functions that allow players to add marks to a specific spot on the board,
-// and then tie it to the DOM, letting players click on the gameboard to place their marker.
-// Don’t forget the logic that keeps players from playing in spots that are already taken!
-
-    // Think carefully about where each bit of logic should reside.
-    // Each little piece of functionality should be able to fit in the game,
-    // player or gameboard objects.. but take care to put them in “logical” places.
-    // Spending a little time brainstorming here can make your life much easier later!
-
-
-// Build the logic that checks for when the game is over! Should check for 3-in-a-row and a tie.
-
-
-// Add a display element that congratulates the winning player!
 
 
 // Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
