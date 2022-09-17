@@ -1,6 +1,15 @@
-// Module to
-// Store the gameboard as an array inside of a Gameboard object
-// Aand you’re probably going to want an object to control the flow of the game itself.
+// Factory function to create player objects
+const Player = function(position, symbol, role, playsNext) {
+
+    return {
+        position, // 1 , 2
+        symbol, // "X" , "O"
+        role, // "human", "ai-easy", "ai-normal", "ai-impossible"
+        playsNext, // true , false
+    }
+}
+
+// Module to store the gameboard as an array and to manage it.
 const gameController = (function() {
     let _gameGrid = []
 
@@ -22,6 +31,37 @@ const gameController = (function() {
         _gameGrid[gridSpaceId] = symbol;
     }
 
+
+
+    // ?????
+
+    // Create an AI so that a player can play against the computer!
+
+    // Start by just getting the computer to make a random legal move.
+
+    // Easy AI function
+    function easyAI() {
+
+    }
+    
+    // Normal AI function
+    function normalAI() {
+
+    }
+
+    // It is possible to create an unbeatable AI using the minimax algorithm
+
+    // Impossible AI function
+    function impossibleAI() {
+
+    }
+
+    // Function to manage which AI to play
+    function aiPlay(aiRole) {
+
+    }
+
+    // ?????
 
 
 
@@ -49,7 +89,11 @@ const gameController = (function() {
         }
 
         // Scenario 9 is a draw
+        
 
+
+        // UPDATE THE BELOW
+        return false
     }
 
     resetGameGrid();
@@ -63,16 +107,19 @@ const gameController = (function() {
 
 })();
 
-// Module that controls html elements
+// Module that controls html elements and the flow of the game itself
 const displayController = (function() {
     const radioInputs = document.querySelectorAll(".radio-buttons");
-    const radioLabels = document.querySelectorAll(".radio-labels");
     const gridSpaceDivs = document.querySelectorAll(".grid-space");
     const messageDiv = document.querySelector(".game-over-message");
     const playButton = document.getElementById("play-button")
     const restartButton = document.getElementById("restart-button");
 
-    let currentPlayer
+
+    let player1 = Player(1, "X", "pending", true);
+    let player2 = Player(2, "O", "pending", false);
+    let currentPlayer = player1;
+    let gameplayIsActive = false;
 
     // Function to disable unselected player types radio buttons
     function disablePlayerSelection() {
@@ -102,34 +149,17 @@ const displayController = (function() {
     }
 
     // Function to switch current player
-    function switchThenGetCurrentPlayer(firstPlayer, secondPlayer) {
-        if (firstPlayer.playsNext === true) {
-            firstPlayer.playsNext = false;
-            secondPlayer.playsNext = true;
-            return secondPlayer
+    function switchThenGetCurrentPlayer() {
+        if (player1.playsNext === true) {
+            player1.playsNext = false;
+            player2.playsNext = true;
+            return player2
         } else {
-            firstPlayer.playsNext = true;
-            secondPlayer.playsNext = false;
-            return firstPlayer
+            player1.playsNext = true;
+            player2.playsNext = false;
+            return player1
         }
     }
-
-    // Play button click event listener to:
-    // Lock player selection
-    // Lock play button
-    // Create player 1 and 2 based on player role selection
-    playButton.addEventListener("click", function () {
-        disablePlayerSelection();
-        playButton.disabled = true;
-
-        let selectedPlayerRoles = getSelectedPlayerRoles();
-        
-        // call create players function
-        const player1 = Player(1, "X", selectedPlayerRoles[0].value, true);
-        const player2 = Player(2, "O", selectedPlayerRoles[1].value, false);
-
-        currentPlayer = player1;
-    })
 
     // Function to display the _gameGrid array contents to the corresponding gridSpaceDivs
     function displayGameGrid (gameGridArray) {
@@ -138,34 +168,94 @@ const displayController = (function() {
         }
     }
 
+    // ?????
+    // ?????
 
-    // Build the functions that allow players to add marks to a specific spot on the board,
-    // and then tie it to the DOM, letting players click on the gameboard to place their marker.
-    // Don’t forget the logic that keeps players from playing in spots that are already taken!
+    // Function that displays an AI play / move
+    function aiDisplay() {
+
+    }
+
+    // ?????
+    // ?????
+
+
+    // Play button click event listener to:
+    // Lock player selection
+    // Lock play button
+    // Create player 1 and 2 based on player role selection
+    // Activate gameplay
+    // If P1 is AI play first move
+    playButton.addEventListener("click", function () {
+        disablePlayerSelection();
+        playButton.disabled = true;
+
+        let selectedPlayerRoles = getSelectedPlayerRoles();
+        
+        // Assign player roles
+        player1.role = selectedPlayerRoles[0].value;
+        player2.role = selectedPlayerRoles[1].value;
+
+        messageDiv.textContent = `It's Player ${currentPlayer.position}'s turn. Mark your ${currentPlayer.symbol} !`
+
+        gameplayIsActive = true;
+
+
+        // ADD FUNCTIONALITY IF P1 IS AI
+        // ADD FUNCTIONALITY IF P1 IS AI
+
+    })
+
 
     // Add event listeners at each gridSpaceDiv to enable player marking functionality
     for (let gridSpaceDiv of gridSpaceDivs) {
         gridSpaceDiv.addEventListener("click", function (e) {
             let gridSpaceDivId = Number(e.target.dataset.gridSpace);
 
-            // call the function to mark a symbol under certain condition
-
-            // call the function to update the array in gameController
-
-            // call the function to change current player under certain condition
+            if (gameplayIsActive && gridSpaceDiv.textContent === "") {
 
 
+                // WHAT IF CURRENT PLAYER IS AN AI ???
+                // WHAT IF CURRENT PLAYER IS AN AI ???
+                // WHAT IF CURRENT PLAYER IS AN AI ???
+
+                gridSpaceDiv.textContent = currentPlayer.symbol;
+
+
+
+                // Update the _gameGrid array in gameController
+                gameController.updateGameGrid(gridSpaceDivId, currentPlayer.symbol);
+                // Check game over and if yes deactivate game
+                if (gameController.checkGameOver() === true) {
+                    gameplayIsActive = false;
+
+
+                    // DISPLAY END GAME MESSAGE???
+                    // DISPLAY END GAME MESSAGE???
+                    // DISPLAY END GAME MESSAGE???
+
+
+                } else {
+                    // Change current player
+                    currentPlayer = switchThenGetCurrentPlayer();
+                    messageDiv.textContent = `It's Player ${currentPlayer.position}'s turn. Mark your ${currentPlayer.symbol} !`
+
+                }
+            }
         })
     }
-
     
     // Restart button event listener to:
-    // Restart game
+    // Revert player selection to TO HUMAN v HUMAN
     // Unlock player selection
     // Unlock play button
-    // Reset gaemGrid then display
-    // ADD FUNCTIONALITY TO REVERT PLAYER SELECTION TO HUMAN v HUMAN or HUMAN v EASY AI
+    // Reset gameGrid then display
+    // Reset game message
+    // Deactivate gameplay
     restartButton.addEventListener("click", function () {
+        radioInputs[0].checked = true;
+        radioInputs[4].checked = true;
+
         enablePlayerSelection();
         playButton.disabled = false;
 
@@ -174,6 +264,7 @@ const displayController = (function() {
         
         messageDiv.textContent = "Please select players' roles then press PLAY!"
 
+        gameplayIsActive = false;
     })
 
     return {
@@ -181,29 +272,10 @@ const displayController = (function() {
     }
 })();
 
-// Factory function to create player objects
-const Player = function(position, symbol, role, playsNext) {
-
-    return {
-        position, // 1 , 2
-        symbol, // "X" , "O"
-        role, // "human", "ai-easy", "ai-normal", "ai-impossible"
-        playsNext, // true , false
-    }
-}
 
 
 
 
 
-// Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
-
-    // Start by just getting the computer to make a random legal move.
-
-    // Once you’ve gotten that, work on making the computer smart.
-    // It is possible to create an unbeatable AI using the minimax algorithm
-    // (read about it here, some googling will help you out with this one)
-    
-    // If you get this running definitely come show it off in the chatroom. It’s quite an accomplishment!
 
 
