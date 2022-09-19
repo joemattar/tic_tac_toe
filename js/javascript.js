@@ -31,26 +31,25 @@ const gameController = (function() {
         _gameGrid[gridSpaceId] = symbol;
     }
 
-
-
-    // ?????
-
-    // Create an AI so that a player can play against the computer!
-
-    // Start by just getting the computer to make a random legal move.
-
-    // Easy AI function, returns a _gameGrid index which is a grid space div ID#
+    // Easy AI function, random legal moves, returns a _gameGrid index which is a grid space div ID#
     function easyAI() {
         let availableGameGrid = [];
-        for (let space of _gameGrid) {
-            if (space === "") {
-                availableGameGrid.push(_gameGrid.indexOf(space));
+        for (let i = 0; i < _gameGrid.length; i++) {
+            if (_gameGrid[i] === "") {
+                availableGameGrid.push(i);
             }
         }
-        console.log(availableGameGrid);
-
+        console.log(_gameGrid)
+        console.log(availableGameGrid)
+        return availableGameGrid[Math.floor(Math.random() * availableGameGrid.length)];
     }
     
+
+
+
+
+
+
     // Normal AI function, returns a _gameGrid index which is a grid space div ID#
     function normalAI() {
 
@@ -62,6 +61,13 @@ const gameController = (function() {
     function impossibleAI() {
 
     }
+
+
+
+
+
+
+
 
     // Function to manage which AI to play
     function aiPlay(aiRole) {
@@ -80,27 +86,47 @@ const gameController = (function() {
     // Returns "X" or "O" or "draw" or "no"
     function checkGameOver() {
         let checkObject = {};
+        for (let h = 0; h < 8; h++) {
+            checkObject[h] = [];
+        }
+
         for (let i = 0; i < _gameGrid.length; i++) {
             // Fill object with scenario 0 to 2 
             for (let j = 0; j <= 2; j++) {
-
+                if (i % 3 === j && _gameGrid[i] !== "") {
+                    checkObject[j].push(_gameGrid[i]);
+                }
             }
             // Fill object with scenario 3 to 5
             for (let k = 3; k <= 5; k++) {
-
+                if ((k-3)*3 <= i && i < (k-2)*3 && _gameGrid[i] !== "") {
+                    checkObject[k].push(_gameGrid[i]);
+                }
             }
             // Fill object with scenario 6
-
+            if (_gameGrid[i] !== "" && (i === 0 || i === 4 || i === 8)){
+                checkObject[6].push(_gameGrid[i]);
+            }
             // Fill object with scenario 7
-
+            if (_gameGrid[i] !== "" && (i === 2 || i === 4 || i === 6)){
+                checkObject[7].push(_gameGrid[i]);
+            }
         }
 
-        // Scenario 9 is a draw
-        
+        for (let l = 0; l < 8; l++) {
+            if (checkObject[l].length === 3 && checkObject[l].every((val, i, arr) => val === arr[0])) {
+                console.log(checkObject[l][0]);
+                return checkObject[l][0];
+            }
+        }
 
-
-        // UPDATE THE BELOW. SHOULD RETURN "X" or "O" or "draw" or "no"
-        return "no"
+        if (_gameGrid.includes("")) {
+            console.log("no");
+            return "no";
+        } else {
+            console.log("draw")
+            return "draw"
+        }
     }
 
     resetGameGrid();
@@ -179,18 +205,30 @@ const displayController = (function() {
      // Function that triggers an AI play from gameController then displays the AI move
     function aiDisplay(aiRole) {
         let aiGridSpaceDivId = gameController.aiPlay(aiRole)
-        gridSpaceDivs[aiGridSpaceDivId].textContent = currentPlayer.symbol;
+        gameController.updateGameGrid(aiGridSpaceDivId, currentPlayer.symbol);
 
-        if (gameController.checkGameOver() === "no") {
-            currentPlayer = switchThenGetCurrentPlayer();
-            messageDiv.textContent = `It's Player ${currentPlayer.position}'s turn. Mark your ${currentPlayer.symbol} !`
-        } else if (gameController.checkGameOver() === "draw") {
+        // TO REVIEW DEBUG ????
+        setTimeout(function () {
             gameplayIsActive = false;
-            messageDiv.textContent = `Game Over! It's A Draw!`
-        } else {
-            gameplayIsActive = false;
-            messageDiv.textContent = `Gaem Over! Player ${currentPlayer.position} - ${currentPlayer.role.toUpperCase()} wins!`
-        }
+
+            gridSpaceDivs[aiGridSpaceDivId].textContent = currentPlayer.symbol;
+
+    
+            if (gameController.checkGameOver() === "no") {
+                currentPlayer = switchThenGetCurrentPlayer();
+                messageDiv.textContent = `It's Player ${currentPlayer.position}'s turn. Mark your ${currentPlayer.symbol} !`
+            } else if (gameController.checkGameOver() === "draw") {
+                gameplayIsActive = false;
+                messageDiv.textContent = `Game Over! It's A Draw!`
+            } else {
+                gameplayIsActive = false;
+                messageDiv.textContent = `Game Over! Player ${currentPlayer.position} - ${currentPlayer.role.toUpperCase()} wins!`
+            }
+
+            gameplayIsActive = true;
+        }, 1000)
+
+
     }
 
     // Play button click event listener to:
