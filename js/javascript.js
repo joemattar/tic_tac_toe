@@ -39,36 +39,40 @@ const gameController = (function() {
 
     // Start by just getting the computer to make a random legal move.
 
-    // Easy AI function
+    // Easy AI function, returns a _gameGrid index which is a grid space div ID#
     function easyAI() {
-        availableGameGrid = _gameGrid.forEach()
+        let availableGameGrid = [];
+        for (let space of _gameGrid) {
+            if (space === "") {
+                availableGameGrid.push(_gameGrid.indexOf(space));
+            }
+        }
+        console.log(availableGameGrid);
 
     }
     
-    // Normal AI function
+    // Normal AI function, returns a _gameGrid index which is a grid space div ID#
     function normalAI() {
 
     }
 
     // It is possible to create an unbeatable AI using the minimax algorithm
 
-    // Impossible AI function
+    // Impossible AI function, returns a _gameGrid index which is a grid space div ID#
     function impossibleAI() {
 
     }
 
     // Function to manage which AI to play
     function aiPlay(aiRole) {
-
-
-        // Returns _gameGrid index which is a grid psace div ID#
+        if (aiRole === "ai-easy") {
+            return easyAI();
+        } else if (aiRole === "ai-normal") {
+            return normalAI();
+        } else if (aiRole === "ai-impossible") {
+            return impossibleAI();
+        }
     }
-
-    // ?????
-
-
-
-
 
     // Function to check if game over:
     // 3 straight or diagonal consecutive symbols = Win
@@ -106,6 +110,7 @@ const gameController = (function() {
         getGameGrid,
         updateGameGrid,
         checkGameOver,
+        aiPlay,
     };
 
 })();
