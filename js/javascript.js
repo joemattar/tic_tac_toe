@@ -9,7 +9,7 @@ const Player = function(position, symbol, role, playsNext) {
     }
 }
 
-// Module to store the gameboard as an array and to manage it.
+// Module to store the gameboard as an array and to manage it as well as the game AI.
 const gameController = (function() {
     let _gameGrid = []
 
@@ -41,6 +41,7 @@ const gameController = (function() {
 
     // Easy AI function
     function easyAI() {
+        availableGameGrid = _gameGrid.forEach()
 
     }
     
@@ -59,6 +60,8 @@ const gameController = (function() {
     // Function to manage which AI to play
     function aiPlay(aiRole) {
 
+
+        // Returns _gameGrid index which is a grid psace div ID#
     }
 
     // ?????
@@ -70,7 +73,7 @@ const gameController = (function() {
     // Function to check if game over:
     // 3 straight or diagonal consecutive symbols = Win
     // Board filled & no consecutive symbols = Draw 
-    // Return WINNING SYMBOL OR DRAW ????
+    // Returns "X" or "O" or "draw" or "no"
     function checkGameOver() {
         let checkObject = {};
         for (let i = 0; i < _gameGrid.length; i++) {
@@ -92,8 +95,8 @@ const gameController = (function() {
         
 
 
-        // UPDATE THE BELOW
-        return false
+        // UPDATE THE BELOW. SHOULD RETURN "X" or "O" or "draw" or "no"
+        return "no"
     }
 
     resetGameGrid();
@@ -168,17 +171,22 @@ const displayController = (function() {
         }
     }
 
-    // ?????
-    // ?????
+     // Function that triggers an AI play from gameController then displays the AI move
+    function aiDisplay(aiRole) {
+        let aiGridSpaceDivId = gameController.aiPlay(aiRole)
+        gridSpaceDivs[aiGridSpaceDivId].textContent = currentPlayer.symbol;
 
-    // Function that displays an AI play / move
-    function aiDisplay() {
-
+        if (gameController.checkGameOver() === "no") {
+            currentPlayer = switchThenGetCurrentPlayer();
+            messageDiv.textContent = `It's Player ${currentPlayer.position}'s turn. Mark your ${currentPlayer.symbol} !`
+        } else if (gameController.checkGameOver() === "draw") {
+            gameplayIsActive = false;
+            messageDiv.textContent = `Game Over! It's A Draw!`
+        } else {
+            gameplayIsActive = false;
+            messageDiv.textContent = `Gaem Over! Player ${currentPlayer.position} - ${currentPlayer.role.toUpperCase()} wins!`
+        }
     }
-
-    // ?????
-    // ?????
-
 
     // Play button click event listener to:
     // Lock player selection
@@ -200,46 +208,36 @@ const displayController = (function() {
 
         gameplayIsActive = true;
 
-
-        // ADD FUNCTIONALITY IF P1 IS AI
-        // ADD FUNCTIONALITY IF P1 IS AI
-
+        while (currentPlayer.role !== "human") {
+            aiDisplay(currentPlayer.role);
+        }
     })
-
 
     // Add event listeners at each gridSpaceDiv to enable player marking functionality
     for (let gridSpaceDiv of gridSpaceDivs) {
         gridSpaceDiv.addEventListener("click", function (e) {
             let gridSpaceDivId = Number(e.target.dataset.gridSpace);
 
-            if (gameplayIsActive && gridSpaceDiv.textContent === "") {
-
-
-                // WHAT IF CURRENT PLAYER IS AN AI ???
-                // WHAT IF CURRENT PLAYER IS AN AI ???
-                // WHAT IF CURRENT PLAYER IS AN AI ???
-
+            if (gameplayIsActive && gridSpaceDiv.textContent === "" && currentPlayer.role === "human") {
+                // Mark the play symbol
                 gridSpaceDiv.textContent = currentPlayer.symbol;
-
-
-
                 // Update the _gameGrid array in gameController
                 gameController.updateGameGrid(gridSpaceDivId, currentPlayer.symbol);
                 // Check game over and if yes deactivate game
-                if (gameController.checkGameOver() === true) {
-                    gameplayIsActive = false;
-
-
-                    // DISPLAY END GAME MESSAGE???
-                    // DISPLAY END GAME MESSAGE???
-                    // DISPLAY END GAME MESSAGE???
-
-
-                } else {
+                if (gameController.checkGameOver() === "no") {
                     // Change current player
                     currentPlayer = switchThenGetCurrentPlayer();
                     messageDiv.textContent = `It's Player ${currentPlayer.position}'s turn. Mark your ${currentPlayer.symbol} !`
 
+                    if (currentPlayer.role !== "human") {
+                        aiDisplay(currentPlayer.role);
+                    }
+                } else if (gameController.checkGameOver() === "draw") {
+                    gameplayIsActive = false;
+                    messageDiv.textContent = `Game Over! It's A Draw!`
+                } else {
+                    gameplayIsActive = false;
+                    messageDiv.textContent = `Gaem Over! Player ${currentPlayer.position} - ${currentPlayer.role.toUpperCase()} wins!`
                 }
             }
         })
@@ -266,16 +264,4 @@ const displayController = (function() {
 
         gameplayIsActive = false;
     })
-
-    return {
-
-    }
 })();
-
-
-
-
-
-
-
-
