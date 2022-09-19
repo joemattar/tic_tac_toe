@@ -1,11 +1,10 @@
 // Factory function to create player objects
-const Player = function(position, symbol, role, playsNext) {
+const Player = function(position, symbol, role) {
 
     return {
         position, // 1 , 2
         symbol, // "X" , "O"
         role, // "human", "ai-easy", "ai-normal", "ai-impossible"
-        playsNext, // true , false
     }
 }
 
@@ -65,6 +64,8 @@ const gameController = (function() {
     // Impossible AI function, returns a _gameGrid index which is a grid space div ID#
     function impossibleAI() {
         let playableSpaces = getPlayableGameSpaces();
+
+
     }
 
 
@@ -158,6 +159,7 @@ const displayController = (function() {
     let player1 = Player(1, "X", "pending", true);
     let player2 = Player(2, "O", "pending", false);
     let currentPlayer = player1;
+    let nextPlayer = player2;
     let gameplayIsActive = false;
 
     // Function to disable unselected player types radio buttons
@@ -189,15 +191,14 @@ const displayController = (function() {
 
     // Function to switch current player
     function switchThenGetCurrentPlayer() {
-        if (player1.playsNext === true) {
-            player1.playsNext = false;
-            player2.playsNext = true;
-            return player2
+        if (currentPlayer === player1) {
+            currentPlayer = player2;
+            nextPlayer = player1;
         } else {
-            player1.playsNext = true;
-            player2.playsNext = false;
-            return player1
+            currentPlayer = player1;
+            nextPlayer = player2;
         }
+        return currentPlayer
     }
 
     // Function to display the _gameGrid array contents to the corresponding gridSpaceDivs
