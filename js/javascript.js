@@ -252,30 +252,26 @@ const displayController = (function() {
     // Activate gameplay
     // If P1 is AI play first move
     playButton.addEventListener("click", function () {
-        disablePlayerSelection();
-        playButton.disabled = true;
-
         let selectedPlayerRoles = getSelectedPlayerRoles();
         
-        // Assign player roles
-        player1.role = selectedPlayerRoles[0].value;
-        player2.role = selectedPlayerRoles[1].value;
+        if (selectedPlayerRoles[0].value !== "human" && selectedPlayerRoles[1].value !== "human") {
+            alert("At least 1 player must be human")
+        } else {
+            disablePlayerSelection();
+            playButton.disabled = true;
+            
+            // Assign player roles
+            player1.role = selectedPlayerRoles[0].value;
+            player2.role = selectedPlayerRoles[1].value;
 
-        messageDiv.textContent = `It's Player ${gamePlayers.currentPlayer.position}'s turn. Mark your ${gamePlayers.currentPlayer.symbol} !`
+            messageDiv.textContent = `It's Player ${gamePlayers.currentPlayer.position}'s turn. Mark your ${gamePlayers.currentPlayer.symbol} !`
 
-        gameplayIsActive = true;
+            gameplayIsActive = true;
 
-
-        console.log(player1)
-        console.log(player2)
-        // test to be deleted once infinite loop is solved (case where time delay is to be implemented)
-        let test = 0
-        while (gamePlayers.currentPlayer.role !== "human" && gameplayIsActive && test < 20) {
-            console.log(gamePlayers.currentPlayer.position)
-            aiDisplay(gamePlayers.currentPlayer.role);
-
-            test += 1;
-        }
+            if (gamePlayers.currentPlayer.role !== "human" && gameplayIsActive) {
+                aiDisplay(gamePlayers.currentPlayer.role);
+            }
+        }    
     })
 
     // Add event listeners at each gridSpaceDiv to enable player marking functionality
