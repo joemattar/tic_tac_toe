@@ -50,10 +50,15 @@ const gameController = (function() {
 
     // Normal AI function, returns a _gameGrid index which is a grid space div ID#
     function normalAI(playableSpaces = getPlayableGameSpaces()) {
+        console.log(counter)
         if (counter % 2 === 1) {
+            counter += 1;
+            console.log("random")
             return easyAI();
         } else if (counter % 2 === 0) {
-            return impossibleAI().index
+            counter += 1;
+            console.log("impossible")
+            return impossibleAI().index;
         }
     }
 
