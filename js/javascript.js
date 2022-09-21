@@ -10,6 +10,8 @@ const Player = function(position, symbol, role) {
 
 // Module to store the gameboard as an array and to manage it as well as the game AI.
 const gameController = (function() {
+
+    let counter = 0;
     let _gameGrid = []
 
     // Empties the gameGrid array and fills it with nine empty strings ""
@@ -31,10 +33,10 @@ const gameController = (function() {
     }
 
     // Function to return an array filled with the index of the remaining playable spaces in the gamegrid
-    function getPlayableGameSpaces() {
+    function getPlayableGameSpaces(gameGrid = _gameGrid) {
         let playableSpaces = []
-        for (let i = 0; i < _gameGrid.length; i++) {
-            if (_gameGrid[i] === "") {
+        for (let i = 0; i < gameGrid.length; i++) {
+            if (gameGrid[i] === "") {
                 playableSpaces.push(i);
             }
         }
@@ -42,38 +44,76 @@ const gameController = (function() {
     }
 
     // Easy AI function, random legal moves, returns a _gameGrid index which is a grid space div ID#
-    function easyAI() {
-        let playableSpaces = getPlayableGameSpaces();
-
+    function easyAI(playableSpaces = getPlayableGameSpaces()) {
         return playableSpaces[Math.floor(Math.random() * playableSpaces.length)];
     }
-    
-
-
-
-
-
 
     // Normal AI function, returns a _gameGrid index which is a grid space div ID#
-    function normalAI() {
-
+    function normalAI(playableSpaces = getPlayableGameSpaces()) {
+        if (counter % 2 === 1) {
+            return easyAI();
+        } else if (counter % 2 === 0) {
+            return impossibleAI().index
+        }
     }
 
     // It is possible to create an unbeatable AI using the minimax algorithm
 
     // Impossible AI function, returns a _gameGrid index which is a grid space div ID#
-    function impossibleAI() {
-        let playableSpaces = getPlayableGameSpaces();
+    function impossibleAI(gameGrid = _gameGrid, playableSpaces = getPlayableGameSpaces(), gameDepth = 0) {
+        // Checks for the terminal results such as win, lose, and tie and returning a corresponding object
+        if (checkGameOver(gameGrid) === "draw") {
+            return {score: 0};
+        } else if (checkGameOver(gameGrid) === "yes" && gameDepth % 2 === 1) {
+            return {score: 10};
+        } else if (checkGameOver(gameGrid) === "yes" && gameDepth % 2 === 0) {
+            return {score: -10};
+        } else {
+            // Increment for recursive checks
+            gameDepth += 1;
 
+            // Array that collects all the moves objects
+            let playableMoves = [];
+            
+            // Check available moves 1 by one taking into account gameDepth (currentPlayer turn vs nextPlayer turn)
+            for (let playableSpace of playableSpaces) {    
+                // Editable deep copy of gameGrid to avoid altering _gameGrid
+                let tempGameGrid = JSON.parse(JSON.stringify(gameGrid));        
+                
+                if (gameDepth % 2 === 1) {                
+                    tempGameGrid[playableSpace] = displayController.gamePlayers.currentPlayer.symbol;
+                } else if (gameDepth % 2 === 0) {                
+                    tempGameGrid[playableSpace] = displayController.gamePlayers.nextPlayer.symbol;
+                }
 
+                let tempPlayableSpaces = getPlayableGameSpaces(tempGameGrid);
+
+                // Declare a playableMove object
+                let playableMove = {};
+                playableMove.index = playableSpace;
+                // Recursive result
+                let result = impossibleAI(tempGameGrid, tempPlayableSpaces, gameDepth);
+                playableMove.score = result.score;
+                // Push playableMove to array of playableMoves
+                playableMoves.push(playableMove);
+            }
+
+            let bestMove = 0;
+            let bestScore = 0;
+
+            // Get index for largest or lowest score of objects in playMoves
+            for (let i = 0; i < playableMoves.length; i++) {
+                if (gameDepth % 2 === 1 && playableMoves[i].score >= bestScore) {
+                    bestScore = playableMoves[i].score;
+                    bestMove = i;
+                } else if (gameDepth % 2 === 0 && playableMoves[i].score <= bestScore) {
+                    bestScore = playableMoves[i].score;
+                    bestMove = i;
+                }
+            }
+            return playableMoves[bestMove];
+        }
     }
-
-
-
-
-
-
-
 
     // Function to manage which AI to play
     function aiPlay(aiRole) {
@@ -82,62 +122,38 @@ const gameController = (function() {
         } else if (aiRole === "ai-normal") {
             return normalAI();
         } else if (aiRole === "ai-impossible") {
-            return impossibleAI();
+            return impossibleAI().index;
         }
     }
 
     // Function to check if game over:
-    // 3 straight or diagonal consecutive symbols = Win
-    // Board filled & no consecutive symbols = Draw 
-    // Returns "X" or "O" or "draw" or "no"
-    function checkGameOver() {
-        let checkObject = {};
-        for (let h = 0; h < 8; h++) {
-            checkObject[h] = [];
-        }
+    // 3 straight or diagonal consecutive symbols (8 cases) = Win
+    // Board filled & no consecutive symbols = Draw
+    // Returns "yes" or "draw" or "no"
+    function checkGameOver(gameGrid = _gameGrid) {
 
-        for (let i = 0; i < _gameGrid.length; i++) {
-            // Fill object with scenario 0 to 2 
-            for (let j = 0; j <= 2; j++) {
-                if (i % 3 === j && _gameGrid[i] !== "") {
-                    checkObject[j].push(_gameGrid[i]);
-                }
+        if (
+            (gameGrid[0] !== "" && gameGrid[0] === gameGrid[1] && gameGrid[1] === gameGrid[2]) ||
+            (gameGrid[3] !== "" && gameGrid[3] === gameGrid[4] && gameGrid[4] === gameGrid[5]) ||
+            (gameGrid[6] !== "" && gameGrid[6] === gameGrid[7] && gameGrid[7] === gameGrid[8]) ||
+            (gameGrid[0] !== "" && gameGrid[0] === gameGrid[3] && gameGrid[3] === gameGrid[6]) ||
+            (gameGrid[1] !== "" && gameGrid[1] === gameGrid[4] && gameGrid[4] === gameGrid[7]) ||
+            (gameGrid[2] !== "" && gameGrid[2] === gameGrid[5] && gameGrid[5] === gameGrid[8]) ||
+            (gameGrid[0] !== "" && gameGrid[0] === gameGrid[4] && gameGrid[4] === gameGrid[8]) ||
+            (gameGrid[2] !== "" && gameGrid[2] === gameGrid[4] && gameGrid[4] === gameGrid[6])
+            ) {
+                return "yes";
+            } else if (gameGrid.includes("")) {
+                return "no";
+            } else {
+                return "draw";
             }
-            // Fill object with scenario 3 to 5
-            for (let k = 3; k <= 5; k++) {
-                if ((k-3)*3 <= i && i < (k-2)*3 && _gameGrid[i] !== "") {
-                    checkObject[k].push(_gameGrid[i]);
-                }
-            }
-            // Fill object with scenario 6
-            if (_gameGrid[i] !== "" && (i === 0 || i === 4 || i === 8)){
-                checkObject[6].push(_gameGrid[i]);
-            }
-            // Fill object with scenario 7
-            if (_gameGrid[i] !== "" && (i === 2 || i === 4 || i === 6)){
-                checkObject[7].push(_gameGrid[i]);
-            }
-        }
-
-        for (let l = 0; l < 8; l++) {
-            if (checkObject[l].length === 3 && checkObject[l].every((val, i, arr) => val === arr[0])) {
-                console.log(checkObject[l][0]);
-                return checkObject[l][0];
-            }
-        }
-
-        if (_gameGrid.includes("")) {
-            console.log("no");
-            return "no";
-        } else {
-            console.log("draw")
-            return "draw"
-        }
     }
 
     resetGameGrid();
 
     return {
+        counter,
         resetGameGrid,
         getGameGrid,
         updateGameGrid,
@@ -158,8 +174,10 @@ const displayController = (function() {
 
     let player1 = Player(1, "X", "pending", true);
     let player2 = Player(2, "O", "pending", false);
-    let currentPlayer = player1;
-    let nextPlayer = player2;
+    let gamePlayers = {
+        currentPlayer: player1,
+        nextPlayer: player2,
+    }
     let gameplayIsActive = false;
 
     // Function to disable unselected player types radio buttons
@@ -191,14 +209,14 @@ const displayController = (function() {
 
     // Function to switch current player
     function switchThenGetCurrentPlayer() {
-        if (currentPlayer === player1) {
-            currentPlayer = player2;
-            nextPlayer = player1;
+        if (gamePlayers.currentPlayer === player1) {
+            gamePlayers.currentPlayer = player2;
+            gamePlayers.nextPlayer = player1;
         } else {
-            currentPlayer = player1;
-            nextPlayer = player2;
+            gamePlayers.currentPlayer = player1;
+            gamePlayers.nextPlayer = player2;
         }
-        return currentPlayer
+        return gamePlayers.currentPlayer
     }
 
     // Function to display the _gameGrid array contents to the corresponding gridSpaceDivs
@@ -211,27 +229,20 @@ const displayController = (function() {
      // Function that triggers an AI play from gameController then displays the AI move
     function aiDisplay(aiRole) {
         let aiGridSpaceDivId = gameController.aiPlay(aiRole)
-        gameController.updateGameGrid(aiGridSpaceDivId, currentPlayer.symbol);
+        gameController.updateGameGrid(aiGridSpaceDivId, gamePlayers.currentPlayer.symbol);
 
 
-
-
-        gridSpaceDivs[aiGridSpaceDivId].textContent = currentPlayer.symbol;
+        gridSpaceDivs[aiGridSpaceDivId].textContent = gamePlayers.currentPlayer.symbol;
         if (gameController.checkGameOver() === "no") {
-            currentPlayer = switchThenGetCurrentPlayer();
-            messageDiv.textContent = `It's Player ${currentPlayer.position}'s turn. Mark your ${currentPlayer.symbol} !`
+            gamePlayers.currentPlayer = switchThenGetCurrentPlayer();
+            messageDiv.textContent = `It's Player ${gamePlayers.currentPlayer.position}'s turn. Mark your ${gamePlayers.currentPlayer.symbol} !`
         } else if (gameController.checkGameOver() === "draw") {
             gameplayIsActive = false;
             messageDiv.textContent = `Game Over! It's A Draw!`
         } else {
             gameplayIsActive = false;
-            messageDiv.textContent = `Game Over! Player ${currentPlayer.position} - ${currentPlayer.role.toUpperCase()} wins!`
+            messageDiv.textContent = `Game Over! Player ${gamePlayers.currentPlayer.position} - ${gamePlayers.currentPlayer.role.toUpperCase()} wins!`
         }
-
-
-
-
-
     }
 
     // Play button click event listener to:
@@ -250,17 +261,18 @@ const displayController = (function() {
         player1.role = selectedPlayerRoles[0].value;
         player2.role = selectedPlayerRoles[1].value;
 
-        messageDiv.textContent = `It's Player ${currentPlayer.position}'s turn. Mark your ${currentPlayer.symbol} !`
+        messageDiv.textContent = `It's Player ${gamePlayers.currentPlayer.position}'s turn. Mark your ${gamePlayers.currentPlayer.symbol} !`
 
         gameplayIsActive = true;
 
 
         console.log(player1)
         console.log(player2)
+        // test to be deleted once infinite loop is solved (case where time delay is to be implemented)
         let test = 0
-        while (currentPlayer.role !== "human" && gameplayIsActive && test < 20) {
-            console.log(currentPlayer.position)
-            aiDisplay(currentPlayer.role);
+        while (gamePlayers.currentPlayer.role !== "human" && gameplayIsActive && test < 20) {
+            console.log(gamePlayers.currentPlayer.position)
+            aiDisplay(gamePlayers.currentPlayer.role);
 
             test += 1;
         }
@@ -271,26 +283,26 @@ const displayController = (function() {
         gridSpaceDiv.addEventListener("click", function (e) {
             let gridSpaceDivId = Number(e.target.dataset.gridSpace);
 
-            if (gameplayIsActive && gridSpaceDiv.textContent === "" && currentPlayer.role === "human") {
+            if (gameplayIsActive && gridSpaceDiv.textContent === "" && gamePlayers.currentPlayer.role === "human") {
                 // Mark the play symbol
-                gridSpaceDiv.textContent = currentPlayer.symbol;
+                gridSpaceDiv.textContent = gamePlayers.currentPlayer.symbol;
                 // Update the _gameGrid array in gameController
-                gameController.updateGameGrid(gridSpaceDivId, currentPlayer.symbol);
+                gameController.updateGameGrid(gridSpaceDivId, gamePlayers.currentPlayer.symbol);
                 // Check game over and if yes deactivate game
                 if (gameController.checkGameOver() === "no") {
                     // Change current player
-                    currentPlayer = switchThenGetCurrentPlayer();
-                    messageDiv.textContent = `It's Player ${currentPlayer.position}'s turn. Mark your ${currentPlayer.symbol} !`
+                    gamePlayers.currentPlayer = switchThenGetCurrentPlayer();
+                    messageDiv.textContent = `It's Player ${gamePlayers.currentPlayer.position}'s turn. Mark your ${gamePlayers.currentPlayer.symbol} !`
 
-                    if (currentPlayer.role !== "human") {
-                        aiDisplay(currentPlayer.role);
+                    if (gamePlayers.currentPlayer.role !== "human") {
+                        aiDisplay(gamePlayers.currentPlayer.role);
                     }
                 } else if (gameController.checkGameOver() === "draw") {
                     gameplayIsActive = false;
                     messageDiv.textContent = `Game Over! It's A Draw!`
                 } else {
                     gameplayIsActive = false;
-                    messageDiv.textContent = `Gaem Over! Player ${currentPlayer.position} - ${currentPlayer.role.toUpperCase()} wins!`
+                    messageDiv.textContent = `Gaem Over! Player ${gamePlayers.currentPlayer.position} - ${gamePlayers.currentPlayer.role.toUpperCase()} wins!`
                 }
             }
         })
@@ -316,5 +328,11 @@ const displayController = (function() {
         messageDiv.textContent = "Please select players' roles then press PLAY!"
 
         gameplayIsActive = false;
+
+        gameController.counter = 0;
     })
+
+    return {
+        gamePlayers,
+    }
 })();
